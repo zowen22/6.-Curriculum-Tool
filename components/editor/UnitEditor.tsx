@@ -23,7 +23,29 @@ export default function UnitEditor({ initialContent }: { initialContent: UnitWit
   const [activeTab, setActiveTab] = useState<Tab>('vocabulary')
   const [generating, setGenerating] = useState(false)
   const [generateError, setGenerateError] = useState<string | null>(null)
+  const [exporting, setExporting] = useState<'workbook' | 'teacher' | null>(null)
   const { unit, vocabulary, workbook, teacher, assessments } = initialContent
+
+  async function handleExport(type: 'workbook' | 'teacher') {
+    setExporting(type)
+    try {
+      const res = await fetch(`/api/export/${type}?unitId=${unit.id}`)
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error ?? 'Export failed')
+        return
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${unit.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${type === 'workbook' ? 'workbook' : 'teacher-manual'}.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+    } finally {
+      setExporting(null)
+    }
+  }
 
   async function handleGenerate() {
     if (!confirm('Generate a full draft? This will overwrite any existing content in this unit.')) return
@@ -67,20 +89,42 @@ export default function UnitEditor({ initialContent }: { initialContent: UnitWit
           </div>
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {generating ? (
-            <>
-              <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Generating…
-            </>
-          ) : (
-            '✦ Generate Draft'
-          )}
-        </button>
+        <div className="shrink-0 flex items-center gap-2">
+          <button
+            onClick={() => handleExport('workbook')}
+            disabled={!!exporting}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {exporting === 'workbook' ? (
+              <span className="inline-block w-3 h-3 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
+            ) : '↓'}
+            Workbook
+          </button>
+          <button
+            onClick={() => handleExport('teacher')}
+            disabled={!!exporting}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {exporting === 'teacher' ? (
+              <span className="inline-block w-3 h-3 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
+            ) : '↓'}
+            Teacher Manual
+          </button>
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {generating ? (
+              <>
+                <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Generating…
+              </>
+            ) : (
+              '✦ Generate Draft'
+            )}
+          </button>
+        </div>
       </div>
 
       {generateError && (
