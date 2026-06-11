@@ -108,7 +108,7 @@ export default function UnitEditor({ initialContent }: { initialContent: UnitWit
       </div>
 
       {activeTab === 'vocabulary' && (
-        <VocabularyEditor unitId={unit.id} userId={unit.user_id} initialWords={vocabulary} />
+        <VocabularyEditor unitId={unit.id} userId={unit.user_id} phonicsSkill={unit.phonics_skill} initialWords={vocabulary} />
       )}
       {activeTab === 'workbook' && (
         <WorkbookEditor unitId={unit.id} userId={unit.user_id} initialContent={workbook} />

@@ -4,10 +4,12 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { VocabularyWord, DifficultyLevel, InstructionalCategory } from '@/types/curriculum'
 import ImageSearchModal from '../ImageSearchModal'
+import OrthographicMapEditor from '../OrthographicMapEditor'
 
 interface Props {
   unitId: string
   userId: string
+  phonicsSkill: string
   initialWords: VocabularyWord[]
 }
 
@@ -25,7 +27,7 @@ const CATEGORY_OPTIONS: { value: InstructionalCategory; label: string }[] = [
 
 const inputClass = 'w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500'
 
-export default function VocabularyEditor({ unitId, userId, initialWords }: Props) {
+export default function VocabularyEditor({ unitId, userId, phonicsSkill, initialWords }: Props) {
   const [words, setWords] = useState<VocabularyWord[]>(initialWords)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [editingWord, setEditingWord] = useState<VocabularyWord | null>(null)
@@ -52,6 +54,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
       word: '',
       definition: null,
       image_url: null,
+      phoneme_grapheme_map: null,
       difficulty_level: null,
       instructional_category: 'core',
       language_transfer_notes: null,
@@ -85,6 +88,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
           word: editingWord.word.trim(),
           definition: editingWord.definition || null,
           image_url: editingWord.image_url || null,
+          phoneme_grapheme_map: editingWord.phoneme_grapheme_map || null,
           difficulty_level: editingWord.difficulty_level,
           instructional_category: editingWord.instructional_category,
           language_transfer_notes: editingWord.language_transfer_notes || null,
@@ -107,6 +111,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
           word: editingWord.word.trim(),
           definition: editingWord.definition || null,
           image_url: editingWord.image_url || null,
+          phoneme_grapheme_map: editingWord.phoneme_grapheme_map || null,
           difficulty_level: editingWord.difficulty_level,
           instructional_category: editingWord.instructional_category,
           language_transfer_notes: editingWord.language_transfer_notes || null,
@@ -240,6 +245,15 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
                       placeholder="Spanish cognates, transfer notes, or pronunciation tips"
                       rows={2}
                       className={`${inputClass} resize-none`}
+                    />
+                  </div>
+
+                  <div>
+                    <OrthographicMapEditor
+                      word={editingWord.word}
+                      phonicsSkill={phonicsSkill}
+                      value={editingWord.phoneme_grapheme_map}
+                      onChange={map => handleEditField('phoneme_grapheme_map', map)}
                     />
                   </div>
 

@@ -1,4 +1,9 @@
 export type UnitStatus = 'draft' | 'review' | 'published'
+
+export interface Segment {
+  grapheme: string
+  phoneme: string
+}
 export type StudentLevel = 'beginner' | 'intermediate' | 'advanced'
 export type DifficultyLevel = 'low' | 'medium' | 'high'
 export type InstructionalCategory = 'core' | 'functional' | 'teacher_note'
@@ -35,6 +40,7 @@ export interface VocabularyWord {
   word: string
   definition: string | null
   image_url: string | null
+  phoneme_grapheme_map: Segment[] | null
   difficulty_level: DifficultyLevel | null
   instructional_category: InstructionalCategory
   language_transfer_notes: string | null
