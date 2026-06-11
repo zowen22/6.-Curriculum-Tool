@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { VocabularyWord, DifficultyLevel, InstructionalCategory } from '@/types/curriculum'
+import ImageSearchModal from '../ImageSearchModal'
 
 interface Props {
   unitId: string
@@ -30,6 +31,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
   const [editingWord, setEditingWord] = useState<VocabularyWord | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showImageModal, setShowImageModal] = useState(false)
 
   function handleExpand(word: VocabularyWord) {
     if (expandedId === word.id) {
@@ -82,6 +84,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
           user_id: editingWord.user_id,
           word: editingWord.word.trim(),
           definition: editingWord.definition || null,
+          image_url: editingWord.image_url || null,
           difficulty_level: editingWord.difficulty_level,
           instructional_category: editingWord.instructional_category,
           language_transfer_notes: editingWord.language_transfer_notes || null,
@@ -103,6 +106,7 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
         .update({
           word: editingWord.word.trim(),
           definition: editingWord.definition || null,
+          image_url: editingWord.image_url || null,
           difficulty_level: editingWord.difficulty_level,
           instructional_category: editingWord.instructional_category,
           language_transfer_notes: editingWord.language_transfer_notes || null,
@@ -163,6 +167,9 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
                 className="w-full flex justify-between items-center px-4 py-3 text-left hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
+                  {word.image_url && (
+                    <img src={word.image_url} alt={word.word} className="shrink-0 w-8 h-8 rounded object-cover" />
+                  )}
                   <span className="font-medium text-gray-900 truncate">
                     {word.word || <span className="text-gray-400 italic font-normal text-sm">New word…</span>}
                   </span>
@@ -236,9 +243,44 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
                     />
                   </div>
 
-                  <div className="pt-2 border-t border-gray-100">
-                    <p className="text-xs text-gray-400 mb-3">Image attachment — Phase 4</p>
-                    {error && <p className="text-xs text-red-600 mb-2">{error}</p>}
+                  <div className="pt-2 border-t border-gray-100 space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-2">Image</label>
+                      {editingWord.image_url ? (
+                        <div>
+                          <img
+                            src={editingWord.image_url}
+                            alt={editingWord.word}
+                            className="w-full h-32 object-cover rounded border border-gray-200"
+                          />
+                          <div className="flex gap-3 mt-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setShowImageModal(true)}
+                              className="text-xs text-indigo-600 hover:text-indigo-500"
+                            >
+                              Change
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleEditField('image_url', null)}
+                              className="text-xs text-red-500 hover:text-red-600"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setShowImageModal(true)}
+                          className="w-full h-20 border-2 border-dashed border-gray-200 rounded flex items-center justify-center text-sm text-gray-400 hover:border-indigo-300 hover:text-indigo-400 transition-colors"
+                        >
+                          + Search image
+                        </button>
+                      )}
+                    </div>
+                    {error && <p className="text-xs text-red-600">{error}</p>}
                     <div className="flex gap-2">
                       <button
                         onClick={handleSave}
@@ -260,6 +302,17 @@ export default function VocabularyEditor({ unitId, userId, initialWords }: Props
             </div>
           ))}
         </div>
+      )}
+
+      {showImageModal && editingWord && (
+        <ImageSearchModal
+          initialQuery={editingWord.word}
+          onSelect={url => {
+            handleEditField('image_url', url)
+            setShowImageModal(false)
+          }}
+          onClose={() => setShowImageModal(false)}
+        />
       )}
     </div>
   )
