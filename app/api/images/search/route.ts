@@ -24,7 +24,10 @@ export async function GET(request: Request) {
     { headers: { Authorization: apiKey } }
   )
 
-  if (!res.ok) return NextResponse.json({ error: 'Pexels request failed' }, { status: 502 })
+  if (!res.ok) {
+    const body = await res.text()
+    return NextResponse.json({ error: `Pexels ${res.status}: ${body}` }, { status: 502 })
+  }
 
   const data = await res.json() as { photos: PexelsPhoto[] }
   const photos = data.photos.map(p => ({
