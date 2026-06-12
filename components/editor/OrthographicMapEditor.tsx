@@ -55,11 +55,11 @@ export default function OrthographicMapEditor({ word, phonicsSkill, value, onCha
           type="button"
           onClick={generate}
           disabled={loading || !word.trim()}
-          className="text-xs text-indigo-600 hover:text-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
+          className="text-xs text-brand-700 hover:text-brand-900 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-colors"
         >
           {loading ? (
             <>
-              <span className="inline-block w-3 h-3 border border-indigo-600 border-t-transparent rounded-full animate-spin" />
+              <span className="inline-block w-3 h-3 border border-brand-600 border-t-transparent rounded-full animate-spin" />
               Generating…
             </>
           ) : value ? 'Regenerate' : '✦ Generate'}
@@ -79,7 +79,7 @@ export default function OrthographicMapEditor({ word, phonicsSkill, value, onCha
                       <input
                         value={seg.grapheme}
                         onChange={e => updateSegment(i, 'grapheme', e.target.value)}
-                        className="w-full text-center text-sm font-medium text-gray-900 bg-transparent focus:outline-none focus:bg-indigo-50 rounded px-1"
+                        className="w-full text-center text-sm font-medium text-gray-900 bg-transparent focus:outline-none focus:bg-brand-50 rounded px-1"
                         placeholder="gr"
                       />
                     </td>
@@ -88,7 +88,7 @@ export default function OrthographicMapEditor({ word, phonicsSkill, value, onCha
                     <button
                       type="button"
                       onClick={addSegment}
-                      className="text-gray-400 hover:text-indigo-600 text-lg leading-none"
+                      className="text-gray-400 hover:text-brand-700 text-lg leading-none transition-colors"
                       title="Add segment"
                     >
                       +
@@ -97,11 +97,11 @@ export default function OrthographicMapEditor({ word, phonicsSkill, value, onCha
                 </tr>
                 <tr>
                   {value.map((seg, i) => (
-                    <td key={i} className="border border-gray-300 px-1 py-0.5 text-center min-w-[3rem] bg-indigo-50">
+                    <td key={i} className="border border-gray-300 px-1 py-0.5 text-center min-w-[3rem] bg-brand-50">
                       <input
                         value={seg.phoneme}
                         onChange={e => updateSegment(i, 'phoneme', e.target.value)}
-                        className="w-full text-center text-xs text-indigo-700 bg-transparent focus:outline-none focus:bg-indigo-100 rounded px-1"
+                        className="w-full text-center text-xs text-brand-700 bg-transparent focus:outline-none focus:bg-brand-100 rounded px-1"
                         placeholder="/p/"
                       />
                     </td>
@@ -130,7 +130,7 @@ export default function OrthographicMapEditor({ word, phonicsSkill, value, onCha
         </div>
       ) : (
         !loading && (
-          <div className="h-16 border-2 border-dashed border-gray-200 rounded flex items-center justify-center">
+          <div className="h-16 border-2 border-dashed border-gray-200 rounded-lg flex items-center justify-center">
             <p className="text-xs text-gray-400">
               {word.trim() ? 'Click ✦ Generate to map graphemes → phonemes' : 'Enter a word first'}
             </p>

@@ -11,20 +11,25 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen" style={{ background: '#fafaf8' }}>
+      <nav className="bg-brand-900 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-14">
-          <Link href="/dashboard" className="text-base font-semibold text-gray-900">
-            Curriculum Tool
+          <Link href="/dashboard" className="flex items-baseline gap-2">
+            <span className="font-serif text-lg font-semibold text-white tracking-tight">
+              Emma&apos;s Curriculum Tool
+            </span>
           </Link>
           <form action="/auth/signout" method="post">
-            <button type="submit" className="text-sm text-gray-500 hover:text-gray-700">
+            <button
+              type="submit"
+              className="text-sm text-brand-200 hover:text-white transition-colors"
+            >
               Sign out
             </button>
           </form>
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {children}
       </main>
     </div>

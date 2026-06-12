@@ -20,7 +20,8 @@ export default function ListEditor({ items, onChange, placeholder }: Props) {
             value={item}
             onChange={e => update(i, e.target.value)}
             placeholder={placeholder}
-            className="flex-1 rounded border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm
+                       focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
           />
           <button
             type="button"
@@ -35,7 +36,7 @@ export default function ListEditor({ items, onChange, placeholder }: Props) {
       <button
         type="button"
         onClick={() => onChange([...items, ''])}
-        className="text-sm text-indigo-600 hover:text-indigo-500"
+        className="text-sm text-brand-700 hover:text-brand-900 font-medium transition-colors"
       >
         + Add
       </button>
