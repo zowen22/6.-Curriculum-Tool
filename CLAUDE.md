@@ -32,6 +32,7 @@ Every project contains a `1. Project Management/` folder with these files:
 
 ## Rules
 - Tag all tasks @claude or @user in Work Packages.md
+- Keep Work Packages task items to one clear verb phrase, ≤60 characters — detail belongs in Technical Reference or Session Log
 - Never delete completed tasks — mark [x]
 - Promote significant decisions to Decisions Log in Project Overview.md
 - Keep Technical Reference.md current as decisions are made
