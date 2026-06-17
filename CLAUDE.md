@@ -16,9 +16,24 @@ Every project contains a `1. Project Management/` folder with these files:
 4. `4. Technical Reference.md` — tech stack, architecture, conventions
 5. `5. Session Log.md` — chronological session history
 
+## Optional PM Artifacts
+Store in sub-folders of `1. Project Management/`. Add a breadcrumb to this file (CLAUDE.md) under an "Open Audits" or "Open Plans" heading so Claude surfaces them at every session start.
+
+### Audits (`Audits/YYYY-MM-DD-<slug>-audit.md`)
+Lifecycle: `Open` → `In Progress` → `Resolved`  
+When to create: a focused review of a specific system, process, or integration is needed.  
+Required header fields: Type, Status, Priority summary, Linked WP#  
+Rule: always link findings to a Work Package phase so they enter the task queue.
+
+### Branched Plans (`Plans/YYYY-MM-DD-<slug>-plan.md`)
+Lifecycle: `Evaluating` → `Decision: [chosen approach]` → `Archived`  
+When to create: two or more meaningful implementation paths need side-by-side comparison before committing.  
+Required fields: Approach A / Approach B (each with summary, tradeoffs, effort estimate, decision criteria).  
+Rule: record the chosen approach in Project Overview Decisions Log when resolved; archive the plan file.
+
 ## Session Start Routine
 1. Check if project files have been shared
-2. If yes — read all files, confirm current status and next priorities
+2. If yes — read all 5 PM files + check for any open Audits/ or Plans/ files; confirm current status and next priorities
 3. If interrupted STARTED entry found in Session Log — flag it immediately
 4. If no files — proceed normally without asking for them
 
